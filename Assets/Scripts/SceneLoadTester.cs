@@ -6,7 +6,7 @@ public class SceneLoadTester : MonoBehaviour
 {
     void Start()
     {
-        LoadingSceneController.LoadScene("InGame");
+        //LoadingSceneController.LoadScene("InGame");
     }
 
     void Update()

@@ -86,6 +86,11 @@ namespace CharacterSelector.Scripts
             SceneManager.LoadScene(2);
         }
 
+        public CharacterInfo GetCurrentCharacter(int index)
+        {
+            return Characters[index];
+        }
+
         public CharacterInfo GetCurrentCharacter()
         {
             return _currentCharacter;

@@ -3,13 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BtnCharacterSelect : MonoBehaviour
+public class BtnCharacterSelect : MonoBehaviour, ISelectHandler
 {
     public InputField CharacterName;
 
     //THIS IS THE NEW INDEX YOU SHOULD SET IT WITH THE INSPECTOR, FIRST SLOT IS INDEX 0 BUTTON
     public int characterIndex;
+
+    public CharacterInfo myCharacter;
+
+    public Color selectedColor, deselectedColor;
+
+    private void Start()
+    {
+        myCharacter = CharacterManager.Instance.GetCurrentCharacter(characterIndex);
+    }
+
+    private void Update()
+    {
+        if (myCharacter == CharacterManager.Instance.GetCurrentCharacter())
+        {
+            Button b = GetComponent<Button>();
+            ColorBlock cb = b.colors;
+            cb.normalColor = selectedColor;
+            b.colors = cb;
+        }
+        else
+        {
+            Button b = GetComponent<Button>();
+            ColorBlock cb = b.colors;
+            cb.normalColor = deselectedColor;
+            b.colors = cb;
+        }
+    }
 
     public void SwitchCharacter()
     {
@@ -37,4 +65,10 @@ public class BtnCharacterSelect : MonoBehaviour
             CharacterManager.Instance.CreateCurrentCharacter(characterName);
         }
     }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        SwitchCharacter();
+    }
+
 }

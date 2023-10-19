@@ -15,21 +15,6 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            menuObject.SetActive(!menuObject.activeSelf);
-
-            if (!menuObject.activeSelf)
-            {
-                mapObject.SetActive(false);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            mapObject.SetActive(!mapObject.activeSelf);
-        }
-
         if (charging)
         {
             timerToChargeProgressBar += Time.deltaTime;
@@ -46,15 +31,12 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void OnMoveButton()
-    {
-        mapObject.SetActive(true);
-    }
 
     public void MoveToLocation(Transform teleportPosition)
     {
         loadingCanvas.SetActive(true);
         charging = true;
+        Time.timeScale = 1f;
         FindObjectOfType<Player>().transform.position = teleportPosition.position;
         FindObjectOfType<Player>().GetComponent<Rigidbody>().velocity = Vector3.zero;
     }

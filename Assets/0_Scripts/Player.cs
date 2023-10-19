@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     public float speed;
-    float hAxis;
-    float vAxis;
     bool wDown;
     bool jDown;
     bool isJump;
@@ -16,40 +15,46 @@ public class Player : MonoBehaviour
     Rigidbody rigid;
     Animator anim;
 
+    public PlayerInput playerInput;
+    public Vector2 movementInput;
+
     // Start is called before the first frame update
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
+        playerInput = CharacterSelected.instance.playerInput;
         anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Character_Selector")
+        if (SceneManager.GetActiveScene().name == "Character_Selector" || WelcomeText.displayingText)
             return;
 
         GetInput();
         Move();
         Turn();
         Jump();
-        
+
     }
 
     void GetInput()
-{
-    hAxis = Input.GetAxis("Horizontal");
-    vAxis = Input.GetAxis("Vertical");
-    wDown = Input.GetButton("Walk");
-    jDown = Input.GetButtonDown("Jump");
+    {
+        movementInput = playerInput.actions["Move"].ReadValue<Vector2>();
 
-  
-}
+        //hAxis = Input.GetAxis("Horizontal");
+        //vAxis = Input.GetAxis("Vertical");
+        //wDown = Input.GetButton("Walk");
+        wDown = playerInput.actions["Walk"].IsPressed();
+        jDown = playerInput.actions["Jump"].WasPressedThisFrame();
+        //jDown = Input.GetButtonDown("Jump");
+    }
 
 
     void Move()
     {
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+        moveVec = new Vector3(movementInput.x, 0, movementInput.y)/*new Vector3(hAxis, 0, vAxis)*/.normalized;
 
         transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
 
@@ -61,14 +66,13 @@ public class Player : MonoBehaviour
     void Turn()
     {
         transform.LookAt(transform.position + moveVec);
-
     }
 
     void Jump()
     {
-        if (jDown && !isJump) 
+        if (jDown && !isJump)
         {
-            rigid.AddForce(Vector3.up * 9, ForceMode.Impulse);
+            rigid.AddForce(Vector3.up * 50, ForceMode.Impulse);
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
             isJump = true;
@@ -76,11 +80,11 @@ public class Player : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
-{
-    if (collision.gameObject.tag == "Floor")
     {
-        anim.SetBool("isJump", false);
-        isJump = false;
+        if (collision.gameObject.tag == "Floor")
+        {
+            anim.SetBool("isJump", false);
+            isJump = false;
+        }
     }
-}
 }

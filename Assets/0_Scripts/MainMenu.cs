@@ -19,6 +19,13 @@ public class MainMenu : MonoBehaviour
 
     public void main()
     {
+        ButtonSound.instance.PlayClick();
         SceneManager.LoadScene(1);
+    }
+
+    public void Exit()
+    {
+        ButtonSound.instance.PlayClick();
+        Application.Quit();
     }
 }

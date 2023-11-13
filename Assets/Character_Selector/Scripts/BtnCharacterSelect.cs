@@ -52,7 +52,7 @@ public class BtnCharacterSelect : MonoBehaviour, ISelectHandler
     public void CreateCharacter()
     {
         string characterName = CharacterName.text.Trim(); // 입력된 닉네임을 가져와서 공백을 제거
-
+        ButtonSound.instance.PlayClick();
         if (string.IsNullOrEmpty(characterName))
         {
             // 닉네임이 입력되지 않았을 때 처리 (예: 오류 메시지 표시 또는 경고)
@@ -68,6 +68,7 @@ public class BtnCharacterSelect : MonoBehaviour, ISelectHandler
 
     public void OnSelect(BaseEventData eventData)
     {
+        ButtonSound.instance.PlayClick();   
         SwitchCharacter();
     }
 

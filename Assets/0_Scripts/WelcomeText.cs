@@ -28,10 +28,16 @@ public class WelcomeText : MonoBehaviour
 
     private void Update()
     {
-        if (CharacterSelected.instance.playerInput.actions["Submit"].WasPressedThisFrame())
+        if (CharacterSelected.instance.playerInput.actions["Submit"].WasPressedThisFrame() && displayingText)
         {
             displayingText = false;
+            Invoke("WaitForMenu", 0.2f);
             gameObject.SetActive(false);
         }
+    }
+
+    void WaitForMenu()
+    {
+        GameManager.stopUsingMenu = false;
     }
 }
